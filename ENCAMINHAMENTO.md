@@ -11,6 +11,7 @@
 | `.gitignore` | Java, Maven, VS Code (`.vscode/`), Eclipse/JDT, IntelliJ, SO |
 | `pom.xml` | `br.com.oficina:oficina-mecanica-patterns`, Java 17, UTF-8, `exec-maven-plugin` → `br.com.oficina.Main` |
 | `src/main/java/br/com/oficina/model/OrdemServico.java` | Context do Strategy e Client do Composite |
+| `README.md` | **Esqueleto inicial**: aviso para a equipe, status, seções vazias e a contribuição do Pedro |
 
 **Atenção:** o projeto **só compila depois que Carlos e Mateus subirem suas classes**, e só roda
 (`exec:java`) depois que a Lara subir o `Main.java`. Isso é esperado.
@@ -159,6 +160,10 @@ console, não do código. Antes de rodar no PowerShell, execute:
 `chcp 65001; $env:MAVEN_OPTS="-Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8"`. Vale citar no README.
 
 ### `README.md`: itens obrigatórios
+
+⚠️ **O `README.md` já existe** (esqueleto criado pelo Pedro). Dê `git pull` e **edite** o arquivo, preenchendo
+as seções marcadas com *"a completar"*. Não crie um README novo por cima, senão dá conflito no Git.
+Mantenha a linha de contribuição do Pedro e, na versão final, **remova o aviso do topo** e a tabela de status.
 
 - Descrição do sistema
 - Tecnologias e pré-requisitos (Java 17+, Maven 3.8+, VS Code)
