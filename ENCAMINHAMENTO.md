@@ -96,6 +96,10 @@ public List<ItemOrdemServico> getItens()             // somente leitura
 Sugestão: validar entradas (nome não vazio, valor ≥ 0, quantidade > 0) com `IllegalArgumentException`,
 como o `OrdemServico` já faz.
 
+⚠️ **Não declare `PacoteServico` (nem `ItemSimples`) como `final`.** Na Parte 2, outra equipe vai criar
+um **novo item composto**, possivelmente herdando de `PacoteServico` (ex.: `class KitFreios extends PacoteServico`).
+Use `public class PacoteServico implements ItemOrdemServico` normal, sem `final`.
+
 ---
 
 ## Mateus Leal: Strategy
@@ -161,6 +165,12 @@ console, não do código. Antes de rodar no PowerShell, execute:
 - Execução: `mvn compile exec:java` e pelo botão **Run** do VS Code (Extension Pack for Java)
 - Exemplo de saída do console (copiar a saída real depois de rodar)
 - Explicação do Composite e do Strategy: classes envolvidas e problema resolvido
+- **Mapeamento das entidades do enunciado** (o professor pede `Veículo`, `OrdemServico` e `Item`): deixar
+  explícito que *"a entidade **Item** é representada pela interface `ItemOrdemServico` e suas implementações
+  `ItemSimples` (item simples) e `PacoteServico` (item composto)"*, para não parecer que falta uma classe `Item`.
+- **Pontos de extensão para a Parte 2:** novo item composto → implementar `ItemOrdemServico` ou estender
+  `PacoteServico`; nova regra de orçamento → implementar `EstrategiaOrcamento`. Em ambos os casos o
+  `OrdemServico` não precisa ser alterado.
 - **Declaração de uso de IA:** o modelo **Claude Opus 5.5** (via Claude Code) foi usado como apoio na
   geração da estrutura inicial do projeto Maven, classes base e documentação; tudo revisado e validado pela equipe.
 - Contribuição de cada integrante (Pedro, Carlos, Mateus, Lara), conforme a divisão combinada.
