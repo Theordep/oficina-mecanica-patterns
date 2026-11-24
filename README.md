@@ -45,13 +45,13 @@
 
 ## Declaração de uso de IA
 
-*(a completar: Lara; ver item obrigatório no `ENCAMINHAMENTO.md`)*
+O Copilot foi utilizado como apoio no desenvolvimento da parte de Carlos Eduardo.
 
 ## Contribuição de cada integrante
 
 - **Pedro Ernesto:** configuração inicial do repositório, estrutura Maven (`pom.xml`, `.gitignore`),
   implementação de `OrdemServico` (Context do Strategy e Client do Composite), definição dos contratos
   entre as classes (`ENCAMINHAMENTO.md`) e revisão geral da arquitetura.
-- **Carlos Eduardo:** *(a completar)*
+- **Carlos Eduardo:** implementou `Veiculo` e o padrão Composite (`ItemOrdemServico`, `ItemSimples` e `PacoteServico`), incluindo cálculo recursivo de valores e validação das entradas.
 - **Mateus Leal:** *(a completar)*
 - **Lara Reck:** *(a completar)*
