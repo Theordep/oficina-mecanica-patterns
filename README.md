@@ -11,7 +11,7 @@
 | Parte | Responsável | Situação |
 |---|---|---|
 | Estrutura Maven, `.gitignore`, `OrdemServico` | Pedro Ernesto | ✅ Concluído |
-| `Veiculo` + Composite (`ItemOrdemServico`, `ItemSimples`, `PacoteServico`) | Carlos Eduardo | ⏳ Pendente |
+| `Veiculo` + Composite (`ItemOrdemServico`, `ItemSimples`, `PacoteServico`) | Carlos Eduardo | ✅ Concluído |
 | Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao`, `OrcamentoComDesconto`) | Mateus Leal | ⏳ Pendente |
 | `Main` + README final | Lara Reck | ⏳ Pendente |
 
