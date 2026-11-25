@@ -12,7 +12,7 @@
 |---|---|---|
 | Estrutura Maven, `.gitignore`, `OrdemServico` | Pedro Ernesto | ✅ Concluído |
 | `Veiculo` + Composite (`ItemOrdemServico`, `ItemSimples`, `PacoteServico`) | Carlos Eduardo | ✅ Concluído |
-| Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao`, `OrcamentoComDesconto`) | Mateus Leal | ⏳ Pendente |
+| Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao`, `OrcamentoComDesconto`) | Mateus Leal | ✅ Concluído |
 | `Main` + README final | Lara Reck | ⏳ Pendente |
 
 ## Descrição do sistema
@@ -47,11 +47,13 @@
 
 O Copilot foi utilizado como apoio no desenvolvimento da parte de Carlos Eduardo.
 
+O Claude Sonnet 5.5 (Claude Code) foi usado para gerar o padrão Strategy, seus testes, a configuração de testes no `pom.xml` e a validação de ciclos em `PacoteServico` (com teste).
+
 ## Contribuição de cada integrante
 
 - **Pedro Ernesto:** configuração inicial do repositório, estrutura Maven (`pom.xml`, `.gitignore`),
   implementação de `OrdemServico` (Context do Strategy e Client do Composite), definição dos contratos
   entre as classes (`ENCAMINHAMENTO.md`) e revisão geral da arquitetura.
 - **Carlos Eduardo:** implementou `Veiculo` e o padrão Composite (`ItemOrdemServico`, `ItemSimples` e `PacoteServico`), incluindo cálculo recursivo de valores e validação das entradas.
-- **Mateus Leal:** *(a completar)*
+- **Mateus Leal:** implementação do padrão Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao` e `OrcamentoComDesconto`) e seus testes; correção de ciclo em `PacoteServico`.
 - **Lara Reck:** *(a completar)*
