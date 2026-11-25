@@ -1,5 +1,7 @@
 package br.com.oficina.composite;
 
+import br.com.oficina.util.Moeda;
+
 import java.math.BigDecimal;
 
 /** Papel <i>Component</i>: contrato comum a itens simples e pacotes. */
@@ -10,6 +12,14 @@ public interface ItemOrdemServico {
 
     /** @return valor total; em um pacote, a soma recursiva dos componentes */
     BigDecimal calcularValor();
+
+    /**
+     * @return parcela de mão de obra cobrada neste item ou pacote.
+     * Itens que cobram mão de obra devem sobrescrever este método.
+     */
+    default BigDecimal calcularValorMaoDeObra() {
+        return Moeda.ZERO;
+    }
 
     /**
      * @param nivel profundidade na árvore, usada na indentação (zero ou maior)

@@ -65,6 +65,11 @@ public class ItemSimples implements ItemOrdemServico {
     }
 
     @Override
+    public BigDecimal calcularValorMaoDeObra() {
+        return tipo == Tipo.SERVICO ? calcularValor() : Moeda.ZERO;
+    }
+
+    @Override
     public String exibir(int nivel) {
         return ItemOrdemServico.indentacao(nivel)
                 + "- " + nome + " (" + tipo + ") x" + quantidade + " = " + Moeda.formatar(calcularValor());

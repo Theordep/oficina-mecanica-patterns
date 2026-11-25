@@ -61,12 +61,24 @@ public class PacoteServico implements ItemOrdemServico {
     }
 
     @Override
+    public BigDecimal calcularValorMaoDeObra() {
+        return itens.stream()
+                .map(ItemOrdemServico::calcularValorMaoDeObra)
+                .reduce(Moeda.ZERO, BigDecimal::add);
+    }
+
+    @Override
     public String exibir(int nivel) {
         StringBuilder exibicao = new StringBuilder(ItemOrdemServico.indentacao(nivel))
-                .append("- Pacote: ").append(nome).append(" = ").append(Moeda.formatar(calcularValor()));
+                .append("- ").append(rotuloExibicao()).append(": ").append(nome)
+                .append(" = ").append(Moeda.formatar(calcularValor()));
         for (ItemOrdemServico item : itens) {
             exibicao.append(System.lineSeparator()).append(item.exibir(nivel + 1));
         }
         return exibicao.toString();
+    }
+
+    protected String rotuloExibicao() {
+        return "Pacote";
     }
 }
