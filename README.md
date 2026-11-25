@@ -1,59 +1,152 @@
 # Oficina Mecânica: Design Patterns (Composite + Strategy)
 
-> ⚠️ **Equipe: leiam o [`ENCAMINHAMENTO.md`](ENCAMINHAMENTO.md) antes de começar.**
-> Ele define as assinaturas exatas de cada classe, a ordem dos commits e o que cada integrante deve entregar.
-> Sempre rode `git pull` antes de começar e antes de dar `git push`.
->
-> *(Este aviso deve ser removido pela Lara na versão final do README.)*
-
-## Status do projeto
-
-| Parte | Responsável | Situação |
-|---|---|---|
-| Estrutura Maven, `.gitignore`, `OrdemServico` | Pedro Ernesto | ✅ Concluído |
-| `Veiculo` + Composite (`ItemOrdemServico`, `ItemSimples`, `PacoteServico`) | Carlos Eduardo | ✅ Concluído |
-| Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao`, `OrcamentoComDesconto`) | Mateus Leal | ✅ Concluído |
-| `Main` + README final | Lara Reck | ⏳ Pendente |
-
 ## Descrição do sistema
 
-*(a completar: Lara)*
+Aplicação Java de console para ordens de serviço (OS) de uma oficina mecânica. Cada OS pertence a um
+veículo e reúne peças, serviços e pacotes (que podem conter outros pacotes). O valor final é calculado
+por uma regra de orçamento que pode ser trocada em tempo de execução. Tudo é mantido em memória.
 
 ## Tecnologias e pré-requisitos
 
 - Java 17+
 - Maven 3.8+
-- VS Code com o *Extension Pack for Java*
+- JUnit 5 (somente testes, baixado pelo Maven)
+- Opcional: VS Code com o *Extension Pack for Java*
 
 ## Como executar
 
-*(a completar: Lara)*
+```bash
+git clone https://github.com/Theordep/oficina-mecanica-patterns.git
+cd oficina-mecanica-patterns
+mvn compile exec:java   # executa a aplicação
+mvn test                # roda os testes
+```
 
-## Exemplo de saída
+No VS Code, abra `Main.java` e clique em **Run**.
 
-*(a completar: Lara)*
+Se o terminal do Windows exibir os acentos incorretamente, rode antes no PowerShell:
+
+```powershell
+chcp 65001
+$env:MAVEN_OPTS="-Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8"
+```
+
+## Exemplo de uso
+
+```java
+Veiculo veiculo = new Veiculo("ABC-1D23", "Fiat Argo", 2021, "João Silva");
+OrdemServico os = new OrdemServico(1, veiculo);
+
+PacoteServico freios = new PacoteServico("Freios");
+freios.adicionarItem(new ItemSimples("Pastilha de freio", ItemSimples.Tipo.PECA, 89.90, 2));
+os.adicionarItem(freios);
+
+os.calcularTotal();                                      // orçamento padrão
+os.trocarEstrategia(new OrcamentoComDesconto(10.0));
+os.calcularTotal();                                      // com 10% de desconto
+```
+
+### Saída da aplicação
+
+```text
+OS #1 | ABC-1D23 - Fiat Argo (2021) - Prop.: João Silva | 3 item(ns) | Estratégia: Orçamento Padrão
+
+- Bateria 60Ah (PECA) x1 = R$ 420,00
+- Alinhamento e balanceamento (SERVICO) x1 = R$ 150,00
+- Pacote: Revisão de 30.000 km = R$ 528,80
+  - Óleo 5W30 (litro) (PECA) x4 = R$ 194,00
+  - Filtro de óleo (PECA) x1 = R$ 35,00
+  - Pacote: Freios = R$ 299,80
+    - Pastilha de freio (PECA) x2 = R$ 179,80
+    - Troca das pastilhas (SERVICO) x1 = R$ 120,00
+
+Subtotal: R$ 1.098,80
+Orçamento Padrão: R$ 1.098,80
+Orçamento com Desconto (10,0%): R$ 988,92
+```
+
+## Entidades
+
+| Entidade do enunciado | No código |
+|---|---|
+| Veículo | `model.Veiculo` |
+| OrdemServico | `model.OrdemServico` |
+| Item | interface `composite.ItemOrdemServico`, implementada por `ItemSimples` e `PacoteServico` |
 
 ## Padrões de projeto utilizados
 
+```mermaid
+classDiagram
+    class ItemOrdemServico {
+        <<interface>>
+        +getDescricao() String
+        +calcularValor() double
+        +exibir(nivel) String
+    }
+    class EstrategiaOrcamento {
+        <<interface>>
+        +calcularTotal(os) double
+        +getNomeEstrategia() String
+    }
+    ItemOrdemServico <|.. ItemSimples
+    ItemOrdemServico <|.. PacoteServico
+    PacoteServico o-- "*" ItemOrdemServico
+    OrdemServico o-- "*" ItemOrdemServico
+    OrdemServico --> EstrategiaOrcamento
+    EstrategiaOrcamento <|.. OrcamentoPadrao
+    EstrategiaOrcamento <|.. OrcamentoComDesconto
+```
+
 ### Composite
 
-*(a completar: Lara)*
+**Problema:** a OS precisa cobrar tanto itens avulsos quanto pacotes com vários níveis, sem tratar cada
+caso com condicionais.
+
+| Papel | Classe |
+|---|---|
+| Component | `ItemOrdemServico` |
+| Leaf | `ItemSimples` |
+| Composite | `PacoteServico` |
+| Client | `OrdemServico` |
+
+`PacoteServico` calcula e exibe seu conteúdo recursivamente, e rejeita ciclos (um pacote não pode conter
+a si mesmo, direta ou indiretamente).
 
 ### Strategy
 
-*(a completar: Lara)*
+**Problema:** a forma de calcular o valor final varia, e cada nova regra não deve exigir mudanças na OS.
+
+| Papel | Classe |
+|---|---|
+| Context | `OrdemServico` |
+| Strategy | `EstrategiaOrcamento` |
+| ConcreteStrategy | `OrcamentoPadrao`, `OrcamentoComDesconto` |
+
+`OrdemServico.calcularTotal()` delega à estratégia atual, que pode ser substituída por
+`trocarEstrategia()`.
+
+## Pontos de extensão (Parte 2)
+
+- **Novo item composto:** implementar `ItemOrdemServico` ou estender `PacoteServico`.
+- **Nova regra de orçamento:** implementar `EstrategiaOrcamento`.
+
+Em ambos os casos, `OrdemServico` não precisa ser alterada.
 
 ## Declaração de uso de IA
 
-O Copilot foi utilizado como apoio no desenvolvimento da parte de Carlos Eduardo.
-
-O Claude Sonnet 5.5 (Claude Code) foi usado para gerar o padrão Strategy, seus testes, a configuração de testes no `pom.xml` e a validação de ciclos em `PacoteServico` (com teste).
+| Ferramenta / modelo | Onde foi usada |
+|---|---|
+| Claude Opus 5.5 (Claude Code) | Estrutura inicial Maven, classes base e documentação inicial |
+| Copilot | Apoio na parte de Carlos Eduardo (`Veiculo` e Composite) |
+| Claude Sonnet 5.5 (Claude Code) | Geração do Strategy, `Main`, testes, validação de ciclos em `PacoteServico` e este README |
 
 ## Contribuição de cada integrante
 
 - **Pedro Ernesto:** configuração inicial do repositório, estrutura Maven (`pom.xml`, `.gitignore`),
   implementação de `OrdemServico` (Context do Strategy e Client do Composite), definição dos contratos
-  entre as classes (`ENCAMINHAMENTO.md`) e revisão geral da arquitetura.
-- **Carlos Eduardo:** implementou `Veiculo` e o padrão Composite (`ItemOrdemServico`, `ItemSimples` e `PacoteServico`), incluindo cálculo recursivo de valores e validação das entradas.
-- **Mateus Leal:** implementação do padrão Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao` e `OrcamentoComDesconto`) e seus testes; correção de ciclo em `PacoteServico`.
-- **Lara Reck:** *(a completar)*
+  entre as classes e revisão geral da arquitetura.
+- **Carlos Eduardo:** implementação de `Veiculo` e do padrão Composite (`ItemOrdemServico`, `ItemSimples`
+  e `PacoteServico`), incluindo cálculo recursivo de valores e validação das entradas.
+- **Mateus Leal:** implementação do padrão Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao` e
+  `OrcamentoComDesconto`) e seus testes; correção de ciclo em `PacoteServico`.
+- **Lara Reck:** responsável pelo `Main` e pelo README final, em versão preparada com apoio de IA.
