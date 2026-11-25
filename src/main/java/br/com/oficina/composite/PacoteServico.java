@@ -19,7 +19,16 @@ public class PacoteServico implements ItemOrdemServico {
     }
 
     public void adicionarItem(ItemOrdemServico item) {
-        itens.add(Objects.requireNonNull(item, "O item do pacote não pode ser nulo."));
+        Objects.requireNonNull(item, "O item do pacote não pode ser nulo.");
+        if (item == this || (item instanceof PacoteServico pacote && pacote.contem(this))) {
+            throw new IllegalArgumentException("Um pacote não pode conter a si mesmo.");
+        }
+        itens.add(item);
+    }
+
+    private boolean contem(ItemOrdemServico alvo) {
+        return itens.stream().anyMatch(item ->
+                item == alvo || (item instanceof PacoteServico pacote && pacote.contem(alvo)));
     }
 
     public boolean removerItem(ItemOrdemServico item) {
