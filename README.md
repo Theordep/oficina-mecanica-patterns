@@ -141,14 +141,13 @@ Em ambos os casos, `OrdemServico` não precisa ser alterada.
 
 ## Declaração de uso de IA
 
-| Ferramenta / modelo | Onde foi usada |
+| Modelo / ferramenta | Onde foi usado |
 |---|---|
 | Claude Opus 5.5 (Claude Code) | Estrutura inicial Maven, classes base e documentação inicial |
-| Copilot | Apoio na parte de Carlos Eduardo (`Veiculo` e Composite) |
-| Claude Sonnet 5.5 (Claude Code) | Geração do Strategy, `Main`, testes, validação de ciclos em `PacoteServico` e este README |
-
-O Claude Sonnet 5.5 também foi usado em uma refatoração posterior de todas as classes (`BigDecimal`,
-utilitários compartilhados, testes e Maven Wrapper), solicitada por Mateus Leal.
+| Copilot | `Veiculo` e Composite (parte de Carlos Eduardo) |
+| Claude Sonnet 5.5 (Claude Code) | `Main` e README (parte de Lara Reck) |
+| Claude Sonnet 5.5 (Claude Code) | Strategy, testes e validação de ciclos (parte de Mateus Leal) |
+| Claude Sonnet 5.5 (Claude Code) | Refatoração posterior de todas as classes (`BigDecimal`, utilitários, testes e Maven Wrapper) |
 
 ## Contribuição de cada integrante
 
