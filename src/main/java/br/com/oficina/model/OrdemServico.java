@@ -3,7 +3,9 @@ package br.com.oficina.model;
 import br.com.oficina.composite.ItemOrdemServico;
 import br.com.oficina.strategy.EstrategiaOrcamento;
 import br.com.oficina.strategy.OrcamentoPadrao;
+import br.com.oficina.util.Moeda;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,12 +98,10 @@ public class OrdemServico {
      *
      * @return soma integral dos itens
      */
-    public double calcularSubtotal() {
-        double subtotal = 0.0;
-        for (ItemOrdemServico item : itens) {
-            subtotal += item.calcularValor();
-        }
-        return subtotal;
+    public BigDecimal calcularSubtotal() {
+        return itens.stream()
+                .map(ItemOrdemServico::calcularValor)
+                .reduce(Moeda.ZERO, BigDecimal::add);
     }
 
     // ------------------------------------------------------------------
@@ -129,7 +129,7 @@ public class OrdemServico {
      *
      * @return valor final do orçamento
      */
-    public double calcularTotal() {
+    public BigDecimal calcularTotal() {
         return estrategia.calcularTotal(this);
     }
 

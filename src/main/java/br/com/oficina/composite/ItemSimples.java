@@ -1,9 +1,14 @@
 package br.com.oficina.composite;
 
-import java.util.Locale;
+import br.com.oficina.util.Moeda;
+import br.com.oficina.util.Validacoes;
+
+import java.math.BigDecimal;
 import java.util.Objects;
 
+/** Papel <i>Leaf</i>: uma peça ou um serviço cobrado por unidade. */
 public class ItemSimples implements ItemOrdemServico {
+
     public enum Tipo {
         PECA,
         SERVICO
@@ -11,23 +16,25 @@ public class ItemSimples implements ItemOrdemServico {
 
     private final String nome;
     private final Tipo tipo;
-    private final double valorUnitario;
+    private final BigDecimal valorUnitario;
     private final int quantidade;
 
-    public ItemSimples(String nome, Tipo tipo, double valorUnitario, int quantidade) {
-        Objects.requireNonNull(nome, "O nome do item não pode ser nulo.");
-        if (nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome do item não pode ser vazio.");
-        }
-        this.nome = nome.trim();
+    /**
+     * @param valorUnitario valor em reais, não negativo e com no máximo duas casas decimais
+     * @param quantidade    maior que zero
+     */
+    public ItemSimples(String nome, Tipo tipo, BigDecimal valorUnitario, int quantidade) {
+        this.nome = Validacoes.textoObrigatorio(nome, "O nome do item");
         this.tipo = Objects.requireNonNull(tipo, "O tipo do item não pode ser nulo.");
-        if (!Double.isFinite(valorUnitario) || valorUnitario < 0) {
-            throw new IllegalArgumentException("O valor unitário não pode ser negativo ou inválido.");
+        Objects.requireNonNull(valorUnitario, "O valor unitário não pode ser nulo.");
+        if (valorUnitario.signum() < 0 || valorUnitario.stripTrailingZeros().scale() > 2) {
+            throw new IllegalArgumentException(
+                    "O valor unitário deve ser não negativo e ter no máximo duas casas decimais.");
         }
         if (quantidade <= 0) {
             throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
         }
-        this.valorUnitario = valorUnitario;
+        this.valorUnitario = Moeda.arredondar(valorUnitario);
         this.quantidade = quantidade;
     }
 
@@ -39,7 +46,7 @@ public class ItemSimples implements ItemOrdemServico {
         return tipo;
     }
 
-    public double getValorUnitario() {
+    public BigDecimal getValorUnitario() {
         return valorUnitario;
     }
 
@@ -53,25 +60,13 @@ public class ItemSimples implements ItemOrdemServico {
     }
 
     @Override
-    public double calcularValor() {
-        return valorUnitario * quantidade;
-    }
-
-    private static String repetirEspacos(int nivel) {
-        StringBuilder espacos = new StringBuilder();
-        for (int i = 0; i < nivel; i++) {
-            espacos.append("  ");
-        }
-        return espacos.toString();
+    public BigDecimal calcularValor() {
+        return valorUnitario.multiply(BigDecimal.valueOf(quantidade));
     }
 
     @Override
     public String exibir(int nivel) {
-        if (nivel < 0) {
-            throw new IllegalArgumentException("O nível não pode ser negativo.");
-        }
-        String indentacao = repetirEspacos(nivel);
-        String valor = String.format(Locale.forLanguageTag("pt-BR"), "R$ %,.2f", calcularValor());
-        return indentacao + "- " + nome + " (" + tipo + ") x" + quantidade + " = " + valor;
+        return ItemOrdemServico.indentacao(nivel)
+                + "- " + nome + " (" + tipo + ") x" + quantidade + " = " + Moeda.formatar(calcularValor());
     }
 }

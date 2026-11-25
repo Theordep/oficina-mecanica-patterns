@@ -9,7 +9,7 @@ por uma regra de orçamento que pode ser trocada em tempo de execução. Tudo é
 ## Tecnologias e pré-requisitos
 
 - Java 17+
-- Maven 3.8+
+- Maven: não precisa instalar, o projeto inclui o Maven Wrapper (`mvnw`)
 - JUnit 5 (somente testes, baixado pelo Maven)
 - Opcional: VS Code com o *Extension Pack for Java*
 
@@ -18,8 +18,9 @@ por uma regra de orçamento que pode ser trocada em tempo de execução. Tudo é
 ```bash
 git clone https://github.com/Theordep/oficina-mecanica-patterns.git
 cd oficina-mecanica-patterns
-mvn compile exec:java   # executa a aplicação
-mvn test                # roda os testes
+./mvnw compile exec:java   # executa a aplicação
+./mvnw test                # roda os testes
+# no Windows, use mvnw.cmd
 ```
 
 No VS Code, abra `Main.java` e clique em **Run**.
@@ -38,11 +39,11 @@ Veiculo veiculo = new Veiculo("ABC-1D23", "Fiat Argo", 2021, "João Silva");
 OrdemServico os = new OrdemServico(1, veiculo);
 
 PacoteServico freios = new PacoteServico("Freios");
-freios.adicionarItem(new ItemSimples("Pastilha de freio", ItemSimples.Tipo.PECA, 89.90, 2));
+freios.adicionarItem(new ItemSimples("Pastilha de freio", ItemSimples.Tipo.PECA, new BigDecimal("89.90"), 2));
 os.adicionarItem(freios);
 
 os.calcularTotal();                                      // orçamento padrão
-os.trocarEstrategia(new OrcamentoComDesconto(10.0));
+os.trocarEstrategia(new OrcamentoComDesconto(BigDecimal.TEN));
 os.calcularTotal();                                      // com 10% de desconto
 ```
 
@@ -80,12 +81,12 @@ classDiagram
     class ItemOrdemServico {
         <<interface>>
         +getDescricao() String
-        +calcularValor() double
+        +calcularValor() BigDecimal
         +exibir(nivel) String
     }
     class EstrategiaOrcamento {
         <<interface>>
-        +calcularTotal(os) double
+        +calcularTotal(os) BigDecimal
         +getNomeEstrategia() String
     }
     ItemOrdemServico <|.. ItemSimples
@@ -132,6 +133,12 @@ a si mesmo, direta ou indiretamente).
 
 Em ambos os casos, `OrdemServico` não precisa ser alterada.
 
+## Decisões técnicas
+
+- Valores monetários usam `BigDecimal` com duas casas e arredondamento `HALF_UP`, evitando erros de ponto
+  flutuante.
+- Um novo item composto deve sobrescrever `contem()`, para manter a detecção de ciclos.
+
 ## Declaração de uso de IA
 
 | Ferramenta / modelo | Onde foi usada |
@@ -139,6 +146,9 @@ Em ambos os casos, `OrdemServico` não precisa ser alterada.
 | Claude Opus 5.5 (Claude Code) | Estrutura inicial Maven, classes base e documentação inicial |
 | Copilot | Apoio na parte de Carlos Eduardo (`Veiculo` e Composite) |
 | Claude Sonnet 5.5 (Claude Code) | Geração do Strategy, `Main`, testes, validação de ciclos em `PacoteServico` e este README |
+
+O Claude Sonnet 5.5 também foi usado em uma refatoração posterior de todas as classes (`BigDecimal`,
+utilitários compartilhados, testes e Maven Wrapper), solicitada por Mateus Leal.
 
 ## Contribuição de cada integrante
 

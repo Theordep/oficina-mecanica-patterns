@@ -2,6 +2,8 @@ package br.com.oficina.strategy;
 
 import br.com.oficina.model.OrdemServico;
 
+import java.math.BigDecimal;
+
 /**
  * Papel <i>Strategy</i>: regra de cálculo do valor final de uma {@link OrdemServico}.
  *
@@ -20,7 +22,7 @@ public interface EstrategiaOrcamento {
      * @param os ordem de serviço a orçar
      * @return valor final do orçamento
      */
-    double calcularTotal(OrdemServico os);
+    BigDecimal calcularTotal(OrdemServico os);
 
     /**
      * @return nome legível da regra, para exibição

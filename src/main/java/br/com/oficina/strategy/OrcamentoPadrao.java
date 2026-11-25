@@ -2,6 +2,7 @@ package br.com.oficina.strategy;
 
 import br.com.oficina.model.OrdemServico;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class OrcamentoPadrao implements EstrategiaOrcamento {
 
     @Override
-    public double calcularTotal(OrdemServico os) {
+    public BigDecimal calcularTotal(OrdemServico os) {
         Objects.requireNonNull(os, "A ordem de serviço é obrigatória.");
         return os.calcularSubtotal();
     }
