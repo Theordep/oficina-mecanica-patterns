@@ -186,14 +186,10 @@ Execute os testes e a demonstração na branch feature/extensao-parte2.
 ./mvnw compile exec:java
 ```
 
-### Equipe extensora e uso de IA
+### Equipe extensora
 
 | Integrante | GitHub | Contribuição |
 |---|---|---|
 | Gabriel Matiola Pagnan | gabrielpagnan | Composite e testes de mão de obra inclusa |
 | Vitor (nome completo a confirmar) | vitorbaschirotto10-debug | Strategy de desconto na mão de obra e testes |
 | Pedro Afonso | p-afonso | Cenário integrado no Main, documentação e verificação da entrega |
-
-Gabriel utilizou Codex como apoio à implementação e aos testes do Composite e ao planejamento do repasse. Vitor informou não ter utilizado IA na sua contribuição.
-
-Uso de IA na etapa de Pedro Afonso —
