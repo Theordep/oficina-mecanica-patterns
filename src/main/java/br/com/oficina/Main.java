@@ -1,5 +1,7 @@
 package br.com.oficina;
 
+import br.com.oficina.composite.PacoteComMaoDeObraInclusa;
+import br.com.oficina.strategy.OrcamentoComDescontoMaoDeObra;
 import br.com.oficina.composite.ItemOrdemServico;
 import br.com.oficina.composite.ItemSimples;
 import br.com.oficina.composite.PacoteServico;
@@ -34,6 +36,37 @@ public class Main {
         exibirTotal(os);
 
         os.trocarEstrategia(new OrcamentoComDesconto(BigDecimal.TEN));
+        exibirTotal(os);
+        demonstrarParte2();
+    }
+
+    private static void demonstrarParte2() {
+        OrdemServico os = new OrdemServico(2,
+                new Veiculo("DEF-4G56", "Fiat Uno", 2020, "Maria Silva"));
+        PacoteServico subpacote = new PacoteServico("Troca de peças");
+        subpacote.adicionarItem(new ItemSimples("Peças", ItemSimples.Tipo.PECA, new BigDecimal("100.00"), 1));
+        subpacote.adicionarItem(new ItemSimples("Instalação inclusa", ItemSimples.Tipo.SERVICO, new BigDecimal("60.00"), 1));
+        PacoteComMaoDeObraInclusa incluso = new PacoteComMaoDeObraInclusa("Manutenção com instalação");
+        incluso.adicionarItem(subpacote);
+        os.adicionarItem(incluso);
+        os.adicionarItem(new ItemSimples("Serviço avulso", ItemSimples.Tipo.SERVICO, new BigDecimal("40.00"), 1));
+        PacoteServico comum = new PacoteServico("Manutenção complementar");
+        comum.adicionarItem(new ItemSimples("Peça complementar", ItemSimples.Tipo.PECA, new BigDecimal("20.00"), 1));
+        comum.adicionarItem(new ItemSimples("Serviço complementar", ItemSimples.Tipo.SERVICO, new BigDecimal("40.00"), 1));
+        os.adicionarItem(comum);
+
+        System.out.println("\nParte 2");
+        System.out.println(os);
+        for (ItemOrdemServico item : os.getItens()) {
+            System.out.println(item.exibir(0));
+        }
+        BigDecimal maoDeObra = os.getItens().stream()
+                .map(ItemOrdemServico::calcularValorMaoDeObra)
+                .reduce(Moeda.ZERO, BigDecimal::add);
+        System.out.println("Subtotal: " + Moeda.formatar(os.calcularSubtotal()));
+        System.out.println("Mão de obra cobrada: " + Moeda.formatar(maoDeObra));
+        exibirTotal(os);
+        os.trocarEstrategia(new OrcamentoComDescontoMaoDeObra(new BigDecimal("25")));
         exibirTotal(os);
     }
 
