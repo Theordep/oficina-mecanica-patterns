@@ -191,5 +191,5 @@ Execute os testes e a demonstração na branch feature/extensao-parte2.
 | Integrante | GitHub | Contribuição |
 |---|---|---|
 | Gabriel Matiola Pagnan | gabrielpagnan | Composite e testes de mão de obra inclusa |
-| Vitor (nome completo a confirmar) | vitorbaschirotto10-debug | Strategy de desconto na mão de obra e testes |
+| Vitor Baschirotto | vitorbaschirotto10-debug | Strategy de desconto na mão de obra e testes |
 | Pedro Afonso | p-afonso | Cenário integrado no Main, documentação e verificação da entrega |
