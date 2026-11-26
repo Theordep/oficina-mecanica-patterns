@@ -159,3 +159,37 @@ Em ambos os casos, `OrdemServico` não precisa ser alterada.
 - **Mateus Leal:** implementação do padrão Strategy (`EstrategiaOrcamento`, `OrcamentoPadrao` e
   `OrcamentoComDesconto`) e seus testes; correção de ciclo em `PacoteServico`.
 - **Lara Reck:** responsável pelo `Main` e pelo README final, em versão preparada com apoio de IA.
+
+## Parte 2 — extensão do Composite e do Strategy
+
+O contrato ItemOrdemServico ganhou calcularValorMaoDeObra(). Itens de serviço retornam a mão de obra cobrada e pacotes comuns somam essa base recursivamente. PacoteComMaoDeObraInclusa cobra somente as peças, inclusive em subpacotes, e retorna zero como base de mão de obra.
+
+OrcamentoComDescontoMaoDeObra aceita um percentual BigDecimal de 0 a 100, inclusive. Soma a base dos itens de primeiro nível, calcula o desconto, arredonda com Moeda.arredondar e subtrai do subtotal. A troca ocorre na mesma OS por trocarEstrategia().
+
+As linhas dos itens simples exibem valores de tabela. Subpacotes comuns exibem seus próprios valores calculados. A linha do pacote com mão de obra inclusa mostra o valor efetivamente cobrado pelo conjunto, por isso serviços internos visíveis estão incluídos nesse valor.
+
+### Cenário demonstrado
+
+| Componente | Peças | Serviços de tabela | Mão de obra cobrada | Subtotal |
+|---|---|---|---|---|
+| Pacote com mão de obra inclusa e subpacote | R$ 100,00 | R$ 60,00 | R$ 0,00 | R$ 100,00 |
+| Serviço avulso | R$ 0,00 | R$ 40,00 | R$ 40,00 | R$ 40,00 |
+| Pacote comum | R$ 20,00 | R$ 40,00 | R$ 40,00 | R$ 60,00 |
+| Total | R$ 120,00 | R$ 140,00 | R$ 80,00 | R$ 200,00 |
+
+Com desconto de 25% sobre R$ 80,00, o desconto é R$ 20,00 e o total final é R$ 180,00.
+
+Execute os testes e a demonstração na branch feature/extensao-parte2.
+
+```bash
+./mvnw test
+./mvnw compile exec:java
+```
+
+### Equipe extensora
+
+| Integrante | GitHub | Contribuição |
+|---|---|---|
+| Gabriel Matiola Pagnan | gabrielpagnan | Composite e testes de mão de obra inclusa |
+| Vitor Baschirotto | vitorbaschirotto10-debug | Strategy de desconto na mão de obra e testes |
+| Pedro Afonso | p-afonso | Cenário integrado no Main, documentação e verificação da entrega |
